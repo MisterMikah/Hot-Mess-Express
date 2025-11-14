@@ -25,6 +25,11 @@ Mess up too badly... and they’ll chase you down.
 - Angry customer chases if the order goes wrong
 
 
+# Assets
+- Food Pack
+- Kitchen Utensils
+
+
 # Team Roles
 - Mikah — Programming / Gameplay Systems  
 - [Name] — 3D Art & Environment  
