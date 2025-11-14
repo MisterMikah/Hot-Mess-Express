@@ -1,13 +1,13 @@
 # Hot-Mess-Express
 CS583 Game - Group T
 
+Hot Mess Express is a chaotic 3D cooking and delivery game made in Unity.  
+Cook the meal, dodge traffic, and try to deliver your food before time runs out or before it’s completely destroyed.
+
 # Names
 Priya Densert
 Mikah Martinez
 Isabella Arevalo
-
-Hot Mess Express is a chaotic 3D cooking and delivery game made in Unity.  
-Cook the meal, dodge traffic, and try to deliver your food before time runs out or before it’s completely destroyed.
 
 
 # Game Summary
@@ -23,6 +23,11 @@ Mess up too badly... and they’ll chase you down.
 - Food damage and time-based scoring
 - Power-ups (speed boosts, extra time)
 - Angry customer chases if the order goes wrong
+
+
+# Assets
+- Food Pack
+- Kitchen Utensils
 
 
 # Team Roles
