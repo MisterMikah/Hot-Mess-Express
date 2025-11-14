@@ -5,9 +5,9 @@ Hot Mess Express is a chaotic 3D cooking and delivery game made in Unity.
 Cook the meal, dodge traffic, and try to deliver your food before time runs out or before it’s completely destroyed.
 
 # Names
-Priya Densert
-Mikah Martinez
-Isabella Arevalo
+1. Priya Densert
+2. Mikah Martinez
+3. Isabella Arevalo
 
 
 # Game Summary
