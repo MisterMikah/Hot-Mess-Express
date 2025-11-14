@@ -30,12 +30,5 @@ Mess up too badly... and they’ll chase you down.
 - Kitchen Utensils
 
 
-# Team Roles
-- Mikah — Programming / Gameplay Systems  
-- [Name] — 3D Art & Environment  
-- [Name] — UI / UX Design  
-- [Name] — Sound & VFX  
-
-
 # Opening Line
 “Cook fast. Run faster. Don’t spill the soup.”
