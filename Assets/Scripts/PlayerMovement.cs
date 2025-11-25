@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Lanes")]
     public float laneWidth = 3f;        // distance between lanes
-    private int lane = 1;                 // 0 = left, 1 = middle, 2 = right
+    private int lane = 1;               // 0 = left, 1 = middle, 2 = right
     private float targetX;
 
     [Header("Jump & Gravity")]
@@ -23,18 +23,22 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration = 0.6f;
     public float slideHeight = 1.0f;
 
+    [Header("Visuals")]
+    public Transform visualModel;        // assign the Model child here
+    public float slideVisualOffset = 0.5f; // how far down the model moves when sliding
+
     // ---- internals ----
     private CharacterController cc;
     private PlayerControls input;
     private bool sliding;
     private Coroutine slideRoutine;
 
-    // Exposed read-only for camera, etc.
     public bool IsSliding => sliding;
 
-    // store originals once so we can go back on cancel/jump
     private float originalHeight;
     private Vector3 originalCenter;
+
+    private Vector3 originalModelLocalPos;
 
     void Awake()
     {
@@ -43,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
 
         originalHeight = cc.height;
         originalCenter = cc.center;
+
+        if (visualModel != null)
+            originalModelLocalPos = visualModel.localPosition;
     }
 
     void OnEnable()
@@ -84,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         move.y = yVelocity * Time.deltaTime;
-
         cc.Move(move);
     }
 
@@ -100,10 +106,8 @@ public class PlayerMovement : MonoBehaviour
 
     void TryJump()
     {
-        // Only jump if grounded
         if (!cc.isGrounded) return;
 
-        // If we’re sliding, cancel slide and go into jump
         if (sliding) CancelSlide();
 
         yVelocity = jumpForce;
@@ -113,7 +117,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (cc.isGrounded)
         {
-            // Begin ground slide
             if (!sliding) slideRoutine = StartCoroutine(SlideRoutine());
         }
         else
@@ -131,6 +134,12 @@ public class PlayerMovement : MonoBehaviour
         cc.height = slideHeight;
         cc.center = new Vector3(originalCenter.x, slideHeight * 0.5f, originalCenter.z);
 
+        // move visual model down
+        if (visualModel != null)
+        {
+            visualModel.localPosition = originalModelLocalPos + new Vector3(0f, -slideVisualOffset, 0f);
+        }
+
         // Time the slide
         float t = 0f;
         while (t < slideDuration && sliding)
@@ -139,9 +148,16 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        // restore if not already restored by CancelSlide()
+        // restore collider
         cc.height = originalHeight;
         cc.center = originalCenter;
+
+        // restore visual
+        if (visualModel != null)
+        {
+            visualModel.localPosition = originalModelLocalPos;
+        }
+
         sliding = false;
         slideRoutine = null;
     }
@@ -150,16 +166,18 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!sliding) return;
 
-        // stop coroutine if running
         if (slideRoutine != null)
         {
             StopCoroutine(slideRoutine);
             slideRoutine = null;
         }
 
-        // restore controller now
         cc.height = originalHeight;
         cc.center = originalCenter;
+
+        if (visualModel != null)
+            visualModel.localPosition = originalModelLocalPos;
+
         sliding = false;
     }
 }
