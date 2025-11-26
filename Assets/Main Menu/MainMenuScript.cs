@@ -15,6 +15,11 @@ public class MainMenuScript : MonoBehaviour
         //             - how to get to build settings: file -> build settings
     }
 
+    public void LoadSettingsMenu() //loads settings menu when press settings button
+    {
+        SceneManager.LoadScene("Settings Menu");
+    }
+
     public void QuitGame() //quits game when press exit button
     {
         Debug.Log("Exit");

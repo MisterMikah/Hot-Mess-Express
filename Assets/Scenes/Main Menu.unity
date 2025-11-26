@@ -285,7 +285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <-- Exit
+  m_text: Exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -729,8 +729,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -820, y: -361}
-  m_SizeDelta: {x: 85, y: 30}
+  m_AnchoredPosition: {x: -882, y: -361}
+  m_SizeDelta: {x: 55, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &591062286
 MonoBehaviour:
@@ -1974,7 +1974,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 700, y: -358}
-  m_SizeDelta: {x: 87, y: 30}
+  m_SizeDelta: {x: 93, y: 34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1657462578
 MonoBehaviour:
@@ -2022,7 +2022,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1530641251}
         m_TargetAssemblyTypeName: MainMenuScript, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: LoadSettingsMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2727,8 +2727,8 @@ SceneRoots:
   - {fileID: 1881463548}
   - {fileID: 913379722}
   - {fileID: 1907920736}
-  - {fileID: 1385626523}
-  - {fileID: 1656898587}
   - {fileID: 1173618903}
   - {fileID: 2118069396}
   - {fileID: 1020641986}
+  - {fileID: 1385626523}
+  - {fileID: 1656898587}
