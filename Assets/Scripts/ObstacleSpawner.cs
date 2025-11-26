@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
@@ -6,35 +6,34 @@ public class ObstacleSpawner : MonoBehaviour
     [Header("Refs")]
     public Transform player;
 
-    [Tooltip("Middle lane obstacles (cones only, can burst).")]
-    public GameObject[] conePrefabs;
+    [Tooltip("Middle lane obstacles (dividers only, spawn in bursts).")]
+    public GameObject[] dividerPrefabs;   // middle lane only
 
     [Tooltip("Side lane heavy obstacles that move toward the player.")]
-    public GameObject[] truckPrefabs;
+    public GameObject[] truckPrefabs;     // left/right lanes
 
     [Tooltip("Side lane static hurdles that can be jumped or slid under.")]
-    public GameObject[] fencePrefabs;
+    public GameObject[] fencePrefabs;     // left/right lanes
 
     [Header("Layout")]
-    public float laneWidth = 2.5f;     // lanes: -laneWidth, 0, +laneWidth
-    public float rowSpacing = 9f;      // distance between rows in Z
-    public float spawnAhead = 80f;     // how far ahead to keep obstacles
-    public float despawnBehind = 20f;  // how far behind player to destroy
+    public float laneWidth = 3f;      // lanes: -laneWidth, 0, +laneWidth
+    public float rowSpacing = 9f;     // distance between rows in Z
+    public float spawnAhead = 80f;    // how far ahead to keep obstacles
+    public float despawnBehind = 20f; // how far behind player to destroy
 
     [Header("Trucks")]
-    public int maxTrucks = 2;          // max trucks alive at once
-    [Range(0f, 1f)] public float truckChance = 0.3f;
+    public int maxTrucks = 2;         // max trucks alive at once
+    [Range(0f, 1f)] public float truckChance = 0.5f;
     public Vector2Int truckRowsMinMax = new Vector2Int(2, 3);
     public float truckMoveSpeed = 5f;
 
-    [Header("Cone Bursts (middle lane only)")]
-    [Range(0f, 1f)] public float coneBurstChance = 0.25f;
-    public Vector2Int coneBurstLen = new Vector2Int(2, 4);
+    [Header("Divider Bursts (middle lane only)")]
+    [Range(0f, 1f)] public float dividerBurstChance = 0.25f;
+    public Vector2Int dividerBurstLen = new Vector2Int(3, 6); // 3â€“6 dividers in a row
 
-    [Header("Side Lane Frequency")]
-    [Range(0f, 1f)] public float sideLaneObstacleChance = 0.6f; // chance lane gets *anything*
+    [Header("Side Lane Variety")]
+    [Range(0f, 1f)] public float sideLaneObstacleChance = 0.6f; // chance that a side lane gets ANY obstacle this row
     [Range(0f, 1f)] public float fenceChance = 0.5f;            // chance of fence when not truck
-
 
     private float nextSpawnZ;
     private readonly List<GameObject> active = new List<GameObject>();
@@ -42,20 +41,21 @@ public class ObstacleSpawner : MonoBehaviour
     // multi-row trucks per lane (0 = left, 1 = middle, 2 = right)
     private int[] laneTruckRows = new int[3];
 
-    // middle-lane cone bursts
-    private int coneBurstRowsLeft = 0;
+    // middle-lane divider bursts
+    private int dividerBurstRowsLeft = 0;
 
     // counts of active trucks/fences per lane so they never share a lane
     private int[] truckCountPerLane = new int[3];
     private int[] fenceCountPerLane = new int[3];
     private int currentTrucks = 0;
 
-    private enum ObstacleType { None, Cone, Fence, Truck }
+    private enum ObstacleType { None, Divider, Fence, Truck }
 
     void Start()
     {
         // start a bit ahead so nothing spawns on top of the player
-        nextSpawnZ = Mathf.Floor(player.position.z / rowSpacing) * rowSpacing + rowSpacing * 4f;
+        float baseZ = Mathf.Floor(player.position.z / rowSpacing) * rowSpacing;
+        nextSpawnZ = baseZ + rowSpacing * 4f;
     }
 
     void Update()
@@ -93,7 +93,7 @@ public class ObstacleSpawner : MonoBehaviour
         bool[] blocked = new bool[3];
         ObstacleType[] type = new ObstacleType[3];
 
-        // 1) continue existing multi-row trucks (side lanes only)
+        // 1) Continue existing multi-row trucks (side lanes only)
         for (int lane = 0; lane < 3; lane++)
         {
             if (laneTruckRows[lane] > 0)
@@ -104,28 +104,22 @@ public class ObstacleSpawner : MonoBehaviour
             }
         }
 
-        // check if both side lanes are already blocked this row by trucks
-        bool sideLanesBlocked = blocked[0] && blocked[2];
-
-        // 2) middle-lane cone bursts (cones only in lane 1)
-        if (!sideLanesBlocked) // never block all three lanes
+        // 2) Middle-lane divider bursts (lane 1)
+        if (dividerBurstRowsLeft > 0)
         {
-            if (coneBurstRowsLeft > 0)
-            {
-                blocked[1] = true;
-                type[1] = ObstacleType.Cone;
-                coneBurstRowsLeft--;
-            }
-            else if (Random.value < coneBurstChance)
-            {
-                coneBurstRowsLeft = Random.Range(coneBurstLen.x, coneBurstLen.y + 1);
-                blocked[1] = true;
-                type[1] = ObstacleType.Cone;
-                coneBurstRowsLeft--;
-            }
+            blocked[1] = true;
+            type[1] = ObstacleType.Divider;
+            dividerBurstRowsLeft--;
+        }
+        else if (Random.value < dividerBurstChance)
+        {
+            dividerBurstRowsLeft = Random.Range(dividerBurstLen.x, dividerBurstLen.y + 1);
+            blocked[1] = true;
+            type[1] = ObstacleType.Divider;
+            dividerBurstRowsLeft--;
         }
 
-        // 3) decide extra obstacles for this row, but keep at least one lane free
+        // 3) Decide extra obstacles for this row, but keep at least one lane free
         List<int> freeLanes = new List<int>();
         for (int lane = 0; lane < 3; lane++)
         {
@@ -149,23 +143,23 @@ public class ObstacleSpawner : MonoBehaviour
 
             if (lane == 1)
             {
-                // middle lane: cones only (if not already part of a burst)
+                // middle lane: dividers only (if not already part of a burst)
                 if (type[1] == ObstacleType.None)
                 {
                     blocked[1] = true;
-                    type[1] = ObstacleType.Cone;
+                    type[1] = ObstacleType.Divider;
                 }
             }
             else
             {
-                // side lanes: fences OR trucks (never both in same lane)
+                // side lanes: maybe trucks, maybe fences, maybe nothing
                 bool laneHasTruck = truckCountPerLane[lane] > 0;
                 bool laneHasFence = fenceCountPerLane[lane] > 0;
 
-                // First, decide if we even place *anything* in this lane this row
+                // First decide if this lane gets ANY obstacle this row
                 if (Random.value > sideLaneObstacleChance)
                 {
-                    // leave lane free this row
+                    // leave this lane free
                     continue;
                 }
 
@@ -180,18 +174,19 @@ public class ObstacleSpawner : MonoBehaviour
                     continue;
 
                 bool spawnTruck = false;
+
                 if (canTruck && canFence)
                 {
-                    // First decide if it should be a truck at all
+                    // First decide if it's a truck at all
                     if (Random.value < truckChance)
                     {
                         spawnTruck = true;
                     }
                     else
                     {
-                        // If RNG says “not truck”, still only spawn fence sometimes
+                        // RNG said "not truck" â†’ maybe fence, maybe nothing
                         if (Random.value > fenceChance)
-                            continue; // nothing in this lane this row
+                            continue; // nothing here
                     }
                 }
                 else if (canTruck)
@@ -200,7 +195,7 @@ public class ObstacleSpawner : MonoBehaviour
                 }
                 else
                 {
-                    // Only fences allowed, but still chance to skip
+                    // Only fences allowed; still chance to skip
                     if (Random.value > fenceChance)
                         continue;
                 }
@@ -211,7 +206,7 @@ public class ObstacleSpawner : MonoBehaviour
                     type[lane] = ObstacleType.Truck;
 
                     int rows = Random.Range(truckRowsMinMax.x, truckRowsMinMax.y + 1);
-                    laneTruckRows[lane] = rows - 1; // current row is first
+                    laneTruckRows[lane] = rows - 1; // this row is first
                 }
                 else
                 {
@@ -228,8 +223,8 @@ public class ObstacleSpawner : MonoBehaviour
 
             switch (type[lane])
             {
-                case ObstacleType.Cone:
-                    SpawnCone(pos);
+                case ObstacleType.Divider:
+                    SpawnDivider(pos);
                     break;
                 case ObstacleType.Fence:
                     SpawnFence(pos, lane);
@@ -258,14 +253,13 @@ public class ObstacleSpawner : MonoBehaviour
         return prefabs[idx];
     }
 
-    void SpawnCone(Vector3 pos)
+    void SpawnDivider(Vector3 pos)
     {
-        GameObject prefab = PickRandom(conePrefabs);
+        GameObject prefab = PickRandom(dividerPrefabs);
         if (!prefab) return;
 
         GameObject go = Instantiate(prefab, pos, Quaternion.identity);
         active.Add(go);
-        // cones only in middle lane; they don't block trucks in side lanes
     }
 
     void SpawnFence(Vector3 pos, int laneIndex)
@@ -288,7 +282,7 @@ public class ObstacleSpawner : MonoBehaviour
         GameObject prefab = PickRandom(truckPrefabs);
         if (!prefab) return;
 
-        // face toward the player (assuming player faces +Z)
+        // face toward the player (assuming player runs along +Z)
         Quaternion rot = Quaternion.Euler(0f, 180f, 0f);
         GameObject go = Instantiate(prefab, pos, rot);
         active.Add(go);
@@ -298,7 +292,9 @@ public class ObstacleSpawner : MonoBehaviour
         mover.speed = truckMoveSpeed;
 
         // track trucks per lane
-        truckCountPerLane[laneIndex]++;
+        if (laneIndex == 0 || laneIndex == 2)
+            truckCountPerLane[laneIndex]++;
+
         currentTrucks = Mathf.Clamp(currentTrucks + 1, 0, maxTrucks);
     }
 
@@ -306,12 +302,13 @@ public class ObstacleSpawner : MonoBehaviour
     {
         // Called just before Destroy(go)
         var mover = go.GetComponent<TruckMover>();
+        int laneIndex = LaneIndexFromX(go.transform.position.x);
+
         if (mover != null)
         {
             // truck despawn
             currentTrucks = Mathf.Max(0, currentTrucks - 1);
 
-            int laneIndex = LaneIndexFromX(go.transform.position.x);
             if (laneIndex >= 0 && laneIndex < 3)
             {
                 truckCountPerLane[laneIndex] = Mathf.Max(0, truckCountPerLane[laneIndex] - 1);
@@ -319,8 +316,7 @@ public class ObstacleSpawner : MonoBehaviour
         }
         else
         {
-            // fence or cone
-            int laneIndex = LaneIndexFromX(go.transform.position.x);
+            // fence or divider (we only track fences for lane blocking)
             if (laneIndex == 0 || laneIndex == 2)
             {
                 fenceCountPerLane[laneIndex] = Mathf.Max(0, fenceCountPerLane[laneIndex] - 1);

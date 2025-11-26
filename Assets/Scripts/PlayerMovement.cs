@@ -27,6 +27,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform visualModel;        // assign the Model child here
     public float slideVisualOffset = 0.5f; // how far down the model moves when sliding
 
+    private int previousLane;
+    public int CurrentLane => lane;
+    public int PreviousLane => previousLane;
+
+
     // ---- internals ----
     private CharacterController cc;
     private PlayerControls input;
@@ -42,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        previousLane = lane; // start with middle
+
         cc = GetComponent<CharacterController>();
         input = new PlayerControls();
 
@@ -98,11 +105,21 @@ public class PlayerMovement : MonoBehaviour
 
     void ChangeLane(int dir)
     {
-        int newLane = Mathf.Clamp(lane + dir, 0, 2); // Can only move within 3 lanes
+        int newLane = Mathf.Clamp(lane + dir, 0, 2); // 0 = left, 1 = middle, 2 = right
         if (newLane == lane) return;
+
+        previousLane = lane;            // remember where we came from
         lane = newLane;
-        targetX = (lane - 1) * laneWidth; // lanes at -w, 0, +w
+        targetX = (lane - 1) * laneWidth; // -w, 0, +w
     }
+
+    // called when you side-bump something
+    public void RevertLane()
+    {
+        lane = previousLane;
+        targetX = (lane - 1) * laneWidth;
+    }
+
 
     void TryJump()
     {
