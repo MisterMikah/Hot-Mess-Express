@@ -951,7 +951,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1973328949}
-  playerMovement: {fileID: 1973328950}
+  controller: {fileID: 1973328953}
+  normalHeight: 2
+  heightTolerance: 0.05
   followLerp: 12
 --- !u!114 &1695225705
 MonoBehaviour:
