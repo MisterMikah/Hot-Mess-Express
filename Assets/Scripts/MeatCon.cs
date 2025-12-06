@@ -19,6 +19,6 @@ public class MeatCon : MonoBehaviour
     private void OnMouseDown()
     {
         if (gameObject.name == "burger_patty")
-            Instantiate(cloneObj, new Vector3(-3, .1f, 0), cloneObj.rotation);
+            Instantiate(cloneObj, new Vector3(1, .1f, -2), cloneObj.rotation);
     }
 }
