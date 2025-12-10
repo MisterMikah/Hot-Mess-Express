@@ -1301,17 +1301,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1973328945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7188450f2dd5f9745bf8d00da58892c2, type: 3}
+  m_Script: {fileID: 11500000, guid: fd9559f09547b4b4380d32e79405ef09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardSpeed: 15
+  forwardSpeed: 10
   laneChangeSpeed: 15
   laneWidth: 3
   jumpForce: 15
   gravity: -27
   fastFallMultiplier: 1.5
   slideDuration: 0.6
-  slideHeight: 1.1
+  slideHeight: 1
   visualModel: {fileID: 1648770411}
   slideVisualOffset: 0.5
 --- !u!143 &1973328953
@@ -1369,7 +1369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHearts: 3
   currentHearts: 3
-  healthUI: {fileID: 0}
+  healthUI: {fileID: 741174401}
 --- !u!1001 &2056570455
 PrefabInstance:
   m_ObjectHideFlags: 0
