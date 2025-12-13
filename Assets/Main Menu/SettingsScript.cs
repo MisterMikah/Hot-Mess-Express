@@ -6,6 +6,6 @@ public class SettingsScript : MonoBehaviour
 {
     public void LoadPrevScene() //return to previous screen when press back button
     {
-        //SceneManager.LoadScene("Settings Menu");
+        //SceneManager.LoadScene(_____);
     }
 }
