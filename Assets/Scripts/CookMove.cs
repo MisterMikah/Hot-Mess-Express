@@ -21,7 +21,7 @@ public class CookMove : MonoBehaviour
 
     private void OnMouseDown()
     {
-        GetComponent<Transform>().position = new Vector3(0, .66f, 0);
+        GetComponent<Transform>().position = new Vector3(3, .50f, -2);
         GameFlow.plateValue += foodValue;
         stillCooking = "n";
     }

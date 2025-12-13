@@ -6,6 +6,8 @@ TagManager:
   tags:
   - RoadTrigger
   - StartSection
+  - Obstacle
+  - Divider
   layers:
   - Default
   - TransparentFX
