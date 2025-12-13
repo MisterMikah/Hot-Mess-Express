@@ -17,6 +17,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void LoadSettingsMenu() //loads settings menu when press settings button
     {
+        //pass scene number?
         SceneManager.LoadScene("Settings Menu");
     }
 
