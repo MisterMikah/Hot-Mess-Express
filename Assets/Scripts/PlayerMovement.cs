@@ -35,6 +35,9 @@ public class PlayerMovement : MonoBehaviour
     public int CurrentLane => lane;
     public int PreviousLane => previousLane;
 
+    [Header("Audio")]
+    public AudioClip jumpClip;
+
 
     // ---- internals ----
     private CharacterController cc;
@@ -127,12 +130,21 @@ public class PlayerMovement : MonoBehaviour
 
     void TryJump()
     {
+        // Only jump if grounded
         if (!cc.isGrounded) return;
 
+        // If we’re sliding, cancel slide and go into jump
         if (sliding) CancelSlide();
 
         yVelocity = jumpForce;
+
+        // play jump sound if manager exists
+        if (SoundFXManager.instance != null && jumpClip != null)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(jumpClip, transform, 1f);
+        }
     }
+
 
     void TrySlide()
     {
