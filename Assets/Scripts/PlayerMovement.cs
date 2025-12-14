@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     public float fastFallMultiplier = 1.5f; // Press down in-air = drop faster
     private float yVelocity;
 
+    /////////////////////////////////// TEST ///////////////////////////////////
+    [SerializeField] private AudioClip jumpClip;
+    ////////////////////////////////////////////////////////////////////////////
+
     [Header("Slide")]
     public float slideDuration = 0.6f;
     public float slideHeight = 1.0f;
