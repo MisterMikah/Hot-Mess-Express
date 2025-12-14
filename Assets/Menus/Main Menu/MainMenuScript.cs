@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
+    public static Boolean prevSceneMain = false;
     public void PlayGame() //starts game when press start button
     {
         SceneManager.LoadScene("Scene_1"); 
@@ -17,7 +19,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void LoadSettingsMenu() //loads settings menu when press settings button
     {
-        //pass scene number?
+        prevSceneMain = true;
         SceneManager.LoadScene("Settings Menu");
     }
 
