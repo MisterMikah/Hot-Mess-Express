@@ -19,10 +19,6 @@ public class PlayerMovement : MonoBehaviour
     public float fastFallMultiplier = 1.5f; // Press down in-air = drop faster
     private float yVelocity;
 
-    //////////////////////////////////// TEST ////////////////////////////////////
-    [SerializeField] private AudioClip jumpClip; 
-    //////////////////////////////////////////////////////////////////////////////
-
     [Header("Slide")]
     public float slideDuration = 0.6f;
     public float slideHeight = 1.0f;
@@ -133,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
         // Only jump if grounded
         if (!cc.isGrounded) return;
 
-        // If we’re sliding, cancel slide and go into jump
+        // If weï¿½re sliding, cancel slide and go into jump
         if (sliding) CancelSlide();
 
         yVelocity = jumpForce;
