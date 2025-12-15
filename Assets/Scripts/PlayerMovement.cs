@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip slideClip;
     public AudioClip laneSwitchClip;
-    private AudioSource runningSource; 
 
 
     // ---- internals ----
@@ -120,12 +119,9 @@ public class PlayerMovement : MonoBehaviour
 
 
         // play lane switch sound
-        if (SoundFXManager.instance != null && laneSwitchClip != null && runningSource.isPlaying) //////////POTENTIALLY DISABLE RUN SOUND HERE
+        if (SoundFXManager.instance != null && laneSwitchClip != null)
         {
-            //not working just yet
-            runningSource.Pause(); //need to make some way for it to unpause
             SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f);
-            runningSource.UnPause();
         }
     }
 
