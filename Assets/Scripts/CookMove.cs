@@ -8,6 +8,7 @@ public class CookMove : MonoBehaviour
     private MeshRenderer meatMat;
     private string stillCooking = "y";
     public AudioClip grillingClip;
+    public AudioClip placeClip;
 
 
     void Start()
@@ -29,6 +30,9 @@ public class CookMove : MonoBehaviour
 
         //destroy audio for grilling when meat off the pan
         SoundFXManager.instance.DestroyLoopingFXClip();
+        //play place sound effect when put on plate
+        SoundFXManager.instance.PlaySoundFXClip(placeClip, transform, 1f);
+
     }
 
     IEnumerator cookTimer()

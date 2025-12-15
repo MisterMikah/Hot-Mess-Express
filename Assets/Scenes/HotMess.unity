@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.5748165, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -207,6 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 2384976829062020430, guid: c50d1c3be71bf45aea7b8a669db13604, type: 3}
   foodValue: 1000000
+  placeClip: {fileID: 8300000, guid: 4afe002c4b4ac4c4586e88881203e530, type: 3}
 --- !u!64 &52507410
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -313,6 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 2502324022757113336, guid: b7d70698a56a6461895cac77b67736f2, type: 3}
   foodValue: 1
+  placeClip: {fileID: 8300000, guid: 4afe002c4b4ac4c4586e88881203e530, type: 3}
 --- !u!64 &226451165
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -571,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 4626259558158494534, guid: 23d2e9085afd64ea3bdd3cd1e207ca52, type: 3}
   foodValue: 1000
+  placeClip: {fileID: 8300000, guid: 4afe002c4b4ac4c4586e88881203e530, type: 3}
 --- !u!1001 &648127435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -655,6 +658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 1053833082334483483, guid: 2037ab28da0ad4392bd6d0a66de72377, type: 3}
   foodValue: 100000
+  placeClip: {fileID: 0}
 --- !u!64 &648127445
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1010,6 +1014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 5384639501377558042, guid: b0339234b206e4d9da36cf3e13f57464, type: 3}
   foodValue: 10
+  placeClip: {fileID: 8300000, guid: 4afe002c4b4ac4c4586e88881203e530, type: 3}
 --- !u!64 &1706711307
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1111,6 +1116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloneObj: {fileID: 2148417860834242642, guid: 0670a7172f42b415bb6a4c69b74eb375, type: 3}
   foodValue: 10000
+  placeClip: {fileID: 8300000, guid: 4afe002c4b4ac4c4586e88881203e530, type: 3}
 --- !u!1 &1894298025
 GameObject:
   m_ObjectHideFlags: 0
