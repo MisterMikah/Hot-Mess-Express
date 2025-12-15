@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip slideClip;
     public AudioClip laneSwitchClip;
+    public AudioClip runningClip;
 
 
     // ---- internals ----
@@ -62,6 +63,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (visualModel != null)
             originalModelLocalPos = visualModel.localPosition;
+
+        // play running sound
+        if (SoundFXManager.instance != null && runningClip != null)
+        {
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); 
+        }
+        
     }
 
     void OnEnable()
@@ -119,9 +127,11 @@ public class PlayerMovement : MonoBehaviour
 
 
         // play lane switch sound
-        if (SoundFXManager.instance != null && laneSwitchClip != null)
+        if (SoundFXManager.instance != null && laneSwitchClip != null) //add condition for running being played
         {
-            SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f);
+            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+            SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f); //plays lane switch sound
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after lane switch
         }
     }
 
@@ -146,7 +156,9 @@ public class PlayerMovement : MonoBehaviour
         // play jump sound if manager exists
         if (SoundFXManager.instance != null && jumpClip != null)
         {
-            SoundFXManager.instance.PlaySoundFXClip(jumpClip, transform, 1f);
+            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+            SoundFXManager.instance.PlaySoundFXClip(jumpClip, transform, 1f); //plays jump sound
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after jump
         }
     }
 
@@ -160,7 +172,9 @@ public class PlayerMovement : MonoBehaviour
             // play slide sound
             if (SoundFXManager.instance != null && slideClip != null)
             {
-                SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f);
+                SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+                SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f); //plays slide whoosh sound
+                SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after sliding
             }
         }
         else

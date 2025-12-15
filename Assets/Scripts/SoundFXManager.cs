@@ -5,6 +5,9 @@ public class SoundFXManager : MonoBehaviour
     public static SoundFXManager instance;
 
     [SerializeField] private AudioSource soundFXObject;
+    
+    private AudioSource audioSource;
+
 
     private void Awake()
     {
@@ -20,18 +23,43 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
+    //plays FX Clip until clip is finished
     public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume)
     {
         if (audioClip == null) return;
 
         // Create a temporary audio source
-        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
         audioSource.clip = audioClip;
         audioSource.volume = volume;
+
         audioSource.Play();
 
         // Destroy after clip finishes
         Destroy(audioSource.gameObject, audioSource.clip.length);
+    }
+
+    
+    //plays loop of FX Clip
+    public void PlayLoopingFXClip(AudioClip audioClip, Transform spawnTransform, float volume)
+    {
+        if (audioClip == null) return;
+
+        // Create a temporary audio source
+        audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+
+        audioSource.clip = audioClip;
+        audioSource.volume = volume;
+
+        audioSource.loop = true;
+        audioSource.Play();
+
+    }
+
+    //destroys looping Clip
+    public void DestroyLoopingFXClip()
+    {
+        Destroy(audioSource.gameObject);
     }
 }
