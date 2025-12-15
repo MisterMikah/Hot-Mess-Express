@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip jumpClip;
+    public AudioClip slideClip;
 
 
     // ---- internals ----
@@ -147,6 +148,12 @@ public class PlayerMovement : MonoBehaviour
         if (cc.isGrounded)
         {
             if (!sliding) slideRoutine = StartCoroutine(SlideRoutine());
+
+            // play slide sound if manager exists
+            if (SoundFXManager.instance != null && slideClip != null)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f);
+            }
         }
         else
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1315,6 +1315,7 @@ MonoBehaviour:
   visualModel: {fileID: 1648770411}
   slideVisualOffset: 0.5
   jumpClip: {fileID: 8300000, guid: 49dfa95868142db4b82debfe005cb955, type: 3}
+  slideClip: {fileID: 8300000, guid: 617bc8fbdeca3ad42bd72698b0e8ede5, type: 3}
 --- !u!143 &1973328953
 CharacterController:
   m_ObjectHideFlags: 0
