@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip slideClip;
     public AudioClip laneSwitchClip;
+    private AudioSource runningSource; 
 
 
     // ---- internals ----
@@ -117,10 +118,13 @@ public class PlayerMovement : MonoBehaviour
         lane = newLane;
         targetX = (lane - 1) * laneWidth; // -w, 0, +w
 
+
         // play lane switch sound
-        if (SoundFXManager.instance != null && laneSwitchClip != null)
+        if (SoundFXManager.instance != null && laneSwitchClip != null && runningSource.isPlaying) //////////POTENTIALLY DISABLE RUN SOUND HERE
         {
+            runningSource.Pause(); //need to make some way for it to unpause
             SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f);
+            runningSource.UnPause();
         }
     }
 
@@ -135,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
     void TryJump()
     {
         // Only jump if grounded
-        if (!cc.isGrounded) return;
+        if (!cc.isGrounded) return; 
 
         // If we�re sliding, cancel slide and go into jump
         if (sliding) CancelSlide();
@@ -207,7 +211,7 @@ public class PlayerMovement : MonoBehaviour
 
     void CancelSlide()
     {
-        if (!sliding) return;
+        if (!sliding) return; 
 
         if (slideRoutine != null)
         {
