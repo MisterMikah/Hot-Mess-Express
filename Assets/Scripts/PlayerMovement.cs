@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Audio")]
     public AudioClip jumpClip;
     public AudioClip slideClip;
+    public AudioClip laneSwitchClip;
 
 
     // ---- internals ----
@@ -115,6 +116,12 @@ public class PlayerMovement : MonoBehaviour
         previousLane = lane;            // remember where we came from
         lane = newLane;
         targetX = (lane - 1) * laneWidth; // -w, 0, +w
+
+        // play lane switch sound
+        if (SoundFXManager.instance != null && laneSwitchClip != null)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f);
+        }
     }
 
     // called when you side-bump something
@@ -149,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!sliding) slideRoutine = StartCoroutine(SlideRoutine());
 
-            // play slide sound if manager exists
+            // play slide sound
             if (SoundFXManager.instance != null && slideClip != null)
             {
                 SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f);

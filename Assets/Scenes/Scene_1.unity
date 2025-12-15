@@ -1316,6 +1316,7 @@ MonoBehaviour:
   slideVisualOffset: 0.5
   jumpClip: {fileID: 8300000, guid: 49dfa95868142db4b82debfe005cb955, type: 3}
   slideClip: {fileID: 8300000, guid: 617bc8fbdeca3ad42bd72698b0e8ede5, type: 3}
+  laneSwitchClip: {fileID: 8300000, guid: 4710edbf51436664e80d9a9db8713307, type: 3}
 --- !u!143 &1973328953
 CharacterController:
   m_ObjectHideFlags: 0
