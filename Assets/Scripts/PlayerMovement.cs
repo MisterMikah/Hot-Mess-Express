@@ -122,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
         // play lane switch sound
         if (SoundFXManager.instance != null && laneSwitchClip != null && runningSource.isPlaying) //////////POTENTIALLY DISABLE RUN SOUND HERE
         {
+            //not working just yet
             runningSource.Pause(); //need to make some way for it to unpause
             SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f);
             runningSource.UnPause();
