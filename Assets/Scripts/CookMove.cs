@@ -7,6 +7,8 @@ public class CookMove : MonoBehaviour
     private int foodValue = 0;
     private MeshRenderer meatMat;
     private string stillCooking = "y";
+    public AudioClip grillingClip;
+
 
     void Start()
     {
@@ -24,10 +26,16 @@ public class CookMove : MonoBehaviour
         GetComponent<Transform>().position = new Vector3(3, .50f, -2);
         GameFlow.plateValue += foodValue;
         stillCooking = "n";
+
+        //destroy audio for grilling when meat off the pan
+        SoundFXManager.instance.DestroyLoopingFXClip();
     }
 
     IEnumerator cookTimer()
     {
+        //start looping audio for grilling
+        SoundFXManager.instance.PlayLoopingFXClip(grillingClip, transform, 0.5f);
+
         yield return new WaitForSeconds(10);
         foodValue = 100;
         if (stillCooking == "y")

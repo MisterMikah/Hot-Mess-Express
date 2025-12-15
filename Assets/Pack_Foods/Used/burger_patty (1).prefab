@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579062adaac774d0da8b5f03120aafd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grillingClip: {fileID: 8300000, guid: 1185bd2f471e37a47a3f90246a77afdb, type: 3}

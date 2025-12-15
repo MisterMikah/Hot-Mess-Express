@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.5748165, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -726,6 +726,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8588675175158118893, guid: 03c7f4ac7c0ed4a33b5e3d5a6b03922c, type: 3}
+      propertyPath: grillingClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 1185bd2f471e37a47a3f90246a77afdb, type: 3}
     - target: {fileID: 5660217011195536373, guid: 03c7f4ac7c0ed4a33b5e3d5a6b03922c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
