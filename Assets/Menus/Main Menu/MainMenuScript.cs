@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
     public static Boolean prevSceneMain = false;
+
+    [SerializeField] private AudioClip buttonPressClip; 
+
     public void PlayGame() //starts game when press start button
     {
         SceneManager.LoadScene("Scene_1"); 
@@ -25,6 +29,9 @@ public class MainMenuScript : MonoBehaviour
 
     public void QuitGame() //quits game when press exit button
     {
+        //SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, transform, 1f); 
+        //used the transform of a ui button so maybe that's why it didn't work 
+
         Debug.Log("Exit");
         Application.Quit();
     }
