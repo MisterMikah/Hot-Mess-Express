@@ -1372,6 +1372,8 @@ MonoBehaviour:
   maxHearts: 3
   currentHearts: 3
   healthUI: {fileID: 741174401}
+  frontHitClip: {fileID: 8300000, guid: 8229eff3359d2f743b54ea033f0f76ef, type: 3}
+  sideHitClip: {fileID: 8300000, guid: 9e9ae4d26cb45d445ad86cd93985aede, type: 3}
 --- !u!1001 &2056570455
 PrefabInstance:
   m_ObjectHideFlags: 0

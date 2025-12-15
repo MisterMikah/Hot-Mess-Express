@@ -9,6 +9,11 @@ public class PlayerCollision : MonoBehaviour
     [Header("UI")]
     public PlayerHealthUI healthUI;   // drag BurgerBar here
 
+    [Header("Audio")]
+    public AudioClip frontHitClip;
+    public AudioClip sideHitClip;
+
+
     private CharacterController cc;
     private PlayerMovement movement;
 
@@ -39,10 +44,23 @@ public class PlayerCollision : MonoBehaviour
         if (headOn)
         {
             // straight into something in your lane
+
+            //play front/straight hit collision sound
+            if (SoundFXManager.instance != null && frontHitClip != null)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(frontHitClip, transform, 1f);
+            }
+
             Die();
         }
         else
         {
+            // play side hit collision sound 
+            if (SoundFXManager.instance != null && sideHitClip != null)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(sideHitClip, transform, 1f);
+            }
+
             // side swipe: lose burger + snap back
             TakeDamage(1);
             if (movement != null)
