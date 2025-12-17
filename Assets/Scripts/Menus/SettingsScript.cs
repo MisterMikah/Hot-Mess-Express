@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class SettingsScript : MonoBehaviour
 {
+    [SerializeField] private AudioClip buttonPressClip;
     public void LoadPrevScene() //return to previous screen (Main Menu or Pause Screen) when press back button
     {
         //scuffed as hell, may change later should better solution present itself
 
         if (MainMenuScript.prevSceneMain) //load main menu if main menu is prev scene
         {
+            SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
             MainMenuScript.prevSceneMain = false;
             SceneManager.LoadScene("Main Menu");
         }

@@ -1298,7 +1298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32c7b841a296e24a8bebab2d5be00a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPressClip: {fileID: 0}
+  bellRingClip: {fileID: 8300000, guid: 8fc51cff58b0643438a0a2825634b292, type: 3}
+  buttonPressClip: {fileID: 8300000, guid: 8fc51cff58b0643438a0a2825634b292, type: 3}
 --- !u!1 &1656898584
 GameObject:
   m_ObjectHideFlags: 0

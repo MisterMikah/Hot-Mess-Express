@@ -1545,6 +1545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b69989bc5380424b8572fbe7671cd5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonPressClip: {fileID: 8300000, guid: 8fc51cff58b0643438a0a2825634b292, type: 3}
 --- !u!1 &1855141362
 GameObject:
   m_ObjectHideFlags: 0
