@@ -8,6 +8,7 @@ TagManager:
   - StartSection
   - Obstacle
   - Divider
+  - RoadSection
   layers:
   - Default
   - TransparentFX

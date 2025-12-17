@@ -51,6 +51,10 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 originalModelLocalPos;
 
+    private void Start()
+    {
+        Time.timeScale = 1f; //ensure time is normal on start
+    }
     void Awake()
     {
         previousLane = lane; // start with middle
