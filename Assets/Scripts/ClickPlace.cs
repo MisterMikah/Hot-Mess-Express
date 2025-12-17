@@ -6,6 +6,7 @@ public class ClickPlace : MonoBehaviour
 {
     public Transform cloneObj;
     public int foodValue;
+    public AudioClip placeClip;
 
     void Start()
     {
@@ -36,6 +37,9 @@ public class ClickPlace : MonoBehaviour
 
         if (gameObject.name == "tomato_slice")
             Instantiate(cloneObj, new Vector3(3, .67f, -2), cloneObj.rotation);
+
+        //place food sound
+        SoundFXManager.instance.PlaySoundFXClip(placeClip, transform, 1f);
 
         GameFlow.plateValue += foodValue;
         Debug.Log(GameFlow.plateValue + "  " + GameFlow.orderValue);
