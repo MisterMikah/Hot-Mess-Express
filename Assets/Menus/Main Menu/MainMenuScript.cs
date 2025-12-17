@@ -13,7 +13,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void PlayGame() //starts game when press start button
     {
-        SceneManager.LoadScene("Scene_1"); 
+        SceneManager.LoadScene("HotMess"); 
         //REMINDERS:
         //      - change string name from "Scene_1" to whatever the real scene will 
         //          officially be called
