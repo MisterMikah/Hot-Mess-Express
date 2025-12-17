@@ -37,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip laneSwitchClip;
     public AudioClip runningClip;
 
+    [SerializeField] private Animator animator;
+
 
     // ---- internals ----
     private CharacterController cc;
@@ -73,7 +75,8 @@ public class PlayerMovement : MonoBehaviour
         {
             SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); 
         }
-        
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
     }
 
     void OnEnable()
@@ -116,6 +119,9 @@ public class PlayerMovement : MonoBehaviour
 
         move.y = yVelocity * Time.deltaTime;
         cc.Move(move);
+
+        UpdateAnimator();
+
     }
 
     // ---------------- helpers ----------------
@@ -242,4 +248,16 @@ public class PlayerMovement : MonoBehaviour
 
         sliding = false;
     }
+
+    void UpdateAnimator()
+    {
+        if (animator == null) return;
+
+        bool grounded = cc.isGrounded;
+
+        animator.SetBool("IsGrounded", grounded);
+        animator.SetBool("IsSliding", sliding);
+    }
+
+
 }

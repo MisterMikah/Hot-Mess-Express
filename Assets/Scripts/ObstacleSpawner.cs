@@ -32,8 +32,8 @@ public class ObstacleSpawner : MonoBehaviour
     public Vector2Int dividerBurstLen = new Vector2Int(3, 6); // 3–6 dividers in a row
 
     [Header("Side Lane Variety")]
-    [Range(0f, 1f)] public float sideLaneObstacleChance = 0.6f; // chance that a side lane gets ANY obstacle this row
-    [Range(0f, 1f)] public float fenceChance = 0.5f;            // chance of fence when not truck
+    [Range(0f, 1f)] public float sideLaneObstacleChance = 0.6f; // chance a side lane gets ANY obstacle this row
+    [Range(0f, 1f)] public float fenceChance = 0.5f;            // (kept, but now only used when trucks are disabled)
 
     private float nextSpawnZ;
     private readonly List<GameObject> active = new List<GameObject>();
@@ -119,7 +119,7 @@ public class ObstacleSpawner : MonoBehaviour
             dividerBurstRowsLeft--;
         }
 
-        // 3) Decide extra obstacles for this row, but keep at least one lane free
+        // 3) Decide extra obstacles for this row, but keep at least one lane free-ish
         List<int> freeLanes = new List<int>();
         for (int lane = 0; lane < 3; lane++)
         {
@@ -127,7 +127,7 @@ public class ObstacleSpawner : MonoBehaviour
                 freeLanes.Add(lane);
         }
 
-        int maxNew = Mathf.Max(0, freeLanes.Count - 1); // keep at least 1 lane free
+        int maxNew = Mathf.Max(0, freeLanes.Count - 1); // keep at least 1 of the *currently free* lanes open
         int newCount = (freeLanes.Count > 0) ? Random.Range(0, maxNew + 1) : 0;
 
         // shuffle free lanes
@@ -156,7 +156,7 @@ public class ObstacleSpawner : MonoBehaviour
                 bool laneHasTruck = truckCountPerLane[lane] > 0;
                 bool laneHasFence = fenceCountPerLane[lane] > 0;
 
-                // First decide if this lane gets ANY obstacle this row
+                // Decide if this lane gets ANY obstacle this row
                 if (Random.value > sideLaneObstacleChance)
                 {
                     // leave this lane free
@@ -175,19 +175,11 @@ public class ObstacleSpawner : MonoBehaviour
 
                 bool spawnTruck = false;
 
+                // NEW: if this lane gets an obstacle, it must be either TRUCK or FENCE, no more "maybe nothing" here
                 if (canTruck && canFence)
                 {
-                    // First decide if it's a truck at all
-                    if (Random.value < truckChance)
-                    {
-                        spawnTruck = true;
-                    }
-                    else
-                    {
-                        // RNG said "not truck" → maybe fence, maybe nothing
-                        if (Random.value > fenceChance)
-                            continue; // nothing here
-                    }
+                    // roll between TRUCK and FENCE
+                    spawnTruck = Random.value < truckChance;
                 }
                 else if (canTruck)
                 {
@@ -195,9 +187,8 @@ public class ObstacleSpawner : MonoBehaviour
                 }
                 else
                 {
-                    // Only fences allowed; still chance to skip
-                    if (Random.value > fenceChance)
-                        continue;
+                    // only fences allowed
+                    spawnTruck = false;
                 }
 
                 if (spawnTruck)
@@ -212,6 +203,34 @@ public class ObstacleSpawner : MonoBehaviour
                 {
                     blocked[lane] = true;
                     type[lane] = ObstacleType.Fence;
+                }
+            }
+        }
+
+        // 3.5) Guarantee at least ONE lane is "safe" (empty or fence)
+        // Treat Truck + Divider as "hard" lanes.
+        int hardCount = 0;
+        for (int lane = 0; lane < 3; lane++)
+        {
+            if (type[lane] == ObstacleType.Truck || type[lane] == ObstacleType.Divider)
+                hardCount++;
+        }
+
+        if (hardCount == 3)
+        {
+            // BAD CASE: all three lanes are "hard" (e.g., divider middle + trucks on both sides).
+            // Soften one side lane to Fence (if we have fences) or None.
+            int laneToSoften = (Random.value < 0.5f) ? 0 : 2; // left or right
+
+            if (type[laneToSoften] == ObstacleType.Truck || type[laneToSoften] == ObstacleType.Divider)
+            {
+                if (fencePrefabs.Length > 0)
+                {
+                    type[laneToSoften] = ObstacleType.Fence;
+                }
+                else
+                {
+                    type[laneToSoften] = ObstacleType.None;
                 }
             }
         }
