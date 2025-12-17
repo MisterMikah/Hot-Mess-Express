@@ -14,7 +14,6 @@ public class PlayerCollision : MonoBehaviour
     public AudioClip sideHitClip;
     public AudioClip runningClip;
 
-
     private CharacterController cc;
     private PlayerMovement movement;
 
@@ -27,9 +26,7 @@ public class PlayerCollision : MonoBehaviour
         currentHearts = maxHearts;
 
         if (healthUI == null)
-        {
             healthUI = FindObjectOfType<PlayerHealthUI>();
-        }
 
         if (healthUI != null)
             healthUI.SetHearts(currentHearts, maxHearts);
@@ -38,55 +35,67 @@ public class PlayerCollision : MonoBehaviour
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (currentHearts <= 0) return;
+
+        // All hittable stuff should be tagged "Obstacle" (trucks, fences, dividers)
         if (!hit.collider.CompareTag("Obstacle")) return;
 
         bool headOn = IsHeadOn(hit);
 
         if (headOn)
         {
-            // straight into something in your lane
-
-            //play front/straight hit collision sound
+            // straight into something
             if (SoundFXManager.instance != null && frontHitClip != null)
             {
-                SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
-                SoundFXManager.instance.PlaySoundFXClip(frontHitClip, transform, 1f); //plays front/straight hit sound
+                SoundFXManager.instance.DestroyLoopingFXClip();
+                SoundFXManager.instance.PlaySoundFXClip(frontHitClip, transform, 1f);
             }
 
             Die();
         }
         else
         {
-            // play side hit collision sound 
-            if (SoundFXManager.instance != null && sideHitClip != null)
-            {
-                SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
-                SoundFXManager.instance.PlaySoundFXClip(sideHitClip, transform, 1f); //plays side hit sound
-                SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running audio after collision
-            }
-
-            // side swipe: lose burger + snap back
-            TakeDamage(1);
-            if (movement != null)
-                movement.RevertLane();
+            HandleSideHit();
         }
     }
 
-    // Decide if this is a head-on hit or a side bump based on lane alignment
+    void HandleSideHit()
+    {
+        if (SoundFXManager.instance != null)
+        {
+            SoundFXManager.instance.DestroyLoopingFXClip();
+
+            if (sideHitClip != null)
+                SoundFXManager.instance.PlaySoundFXClip(sideHitClip, transform, 1f);
+
+            if (runningClip != null)
+                SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f);
+        }
+
+        TakeDamage(1);
+
+        if (movement != null)
+            movement.RevertLane();
+    }
+
+    // Decide if this is a head-on hit or a side bump based on HOW we were moving
     bool IsHeadOn(ControllerColliderHit hit)
     {
-        if (movement == null) return true; // be safe
+        Vector3 move = hit.moveDirection;
+        move.y = 0f;
 
-        // center X of obstacle vs player
-        float playerX = transform.position.x;
-        float obstacleX = hit.collider.bounds.center.x;
+        if (move.sqrMagnitude < 0.0001f)
+        {
+            // weird degenerate case, just treat as side
+            return false;
+        }
 
-        // if almost same lane center in X → treat as head-on
-        float laneWidth = movement.laneWidth;
-        float dx = Mathf.Abs(obstacleX - playerX);
+        // local Z = forward, X = sideways
+        Vector3 localMove = transform.InverseTransformDirection(move);
+        float absX = Mathf.Abs(localMove.x);
+        float absZ = Mathf.Abs(localMove.z);
 
-        // tune the 0.4f factor: smaller = stricter front hits only
-        return dx < laneWidth * 0.4f;
+        // Bias toward side hits a bit so "almost sideways" counts as side
+        return absZ >= absX * 1.2f;
     }
 
     void TakeDamage(int amount)
@@ -101,10 +110,11 @@ public class PlayerCollision : MonoBehaviour
 
         if (currentHearts <= 0)
         {
-            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+            if (SoundFXManager.instance != null)
+                SoundFXManager.instance.DestroyLoopingFXClip();
+
             Die();
         }
-            
     }
 
     void Die()
