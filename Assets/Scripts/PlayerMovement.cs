@@ -24,6 +24,12 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration = 0.6f;
     public float slideHeight = 1.0f;
 
+    [Header("Audio")]
+    public AudioClip jumpClip;
+    public AudioClip slideClip;
+    public AudioClip laneSwitchClip;
+    public AudioClip runningClip;
+
     [Header("Animation")]
     [SerializeField] private Animator animator;
     [SerializeField] private Transform visualRoot; // model root to rotate at finish
@@ -54,6 +60,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (visualRoot == null && animator != null)
             visualRoot = animator.transform;
+
+        if (SoundFXManager.instance != null && runningClip != null)
+        {
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f);
+        }
+
     }
 
     void OnEnable()
@@ -128,6 +140,15 @@ public class PlayerMovement : MonoBehaviour
         previousLane = lane;
         lane = newLane;
         targetX = (lane - 1) * laneWidth; // lanes at -w, 0, +w
+
+        // play lane switch sound
+        if (SoundFXManager.instance != null && laneSwitchClip != null) //add condition for running being played
+        {
+            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+            SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f); //plays lane switch sound
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after lane switch
+        }
+
     }
 
     public void RevertLane()
@@ -143,6 +164,15 @@ public class PlayerMovement : MonoBehaviour
         if (sliding) CancelSlide();
 
         yVelocity = jumpForce;
+
+        // play jump sound if manager exists
+        if (SoundFXManager.instance != null && jumpClip != null)
+        {
+            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+            SoundFXManager.instance.PlaySoundFXClip(jumpClip, transform, 1f); //plays jump sound
+            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after jump
+        }
+
     }
 
     void TrySlide()
@@ -150,6 +180,14 @@ public class PlayerMovement : MonoBehaviour
         if (cc.isGrounded)
         {
             if (!sliding) slideRoutine = StartCoroutine(SlideRoutine());
+
+            // play slide sound
+            if (SoundFXManager.instance != null && slideClip != null)
+            {
+                SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
+                SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f); //plays slide whoosh sound
+                SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after sliding
+            }
         }
         else
         {

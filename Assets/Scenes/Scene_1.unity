@@ -2867,6 +2867,10 @@ MonoBehaviour:
   fastFallMultiplier: 1.5
   slideDuration: 0.6
   slideHeight: 1
+  jumpClip: {fileID: 8300000, guid: 49dfa95868142db4b82debfe005cb955, type: 3}
+  slideClip: {fileID: 8300000, guid: 617bc8fbdeca3ad42bd72698b0e8ede5, type: 3}
+  laneSwitchClip: {fileID: 8300000, guid: 4710edbf51436664e80d9a9db8713307, type: 3}
+  runningClip: {fileID: 8300000, guid: 2ba05191b37422d46ba68f38fef36640, type: 3}
   animator: {fileID: 417988813}
   visualRoot: {fileID: 1973328949}
 --- !u!143 &1973328953
