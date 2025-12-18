@@ -62,4 +62,16 @@ public class SoundFXManager : MonoBehaviour
     {
         Destroy(audioSource.gameObject);
     }
+
+    //pause audio when game is paused
+    public void PauseClip()
+    {
+        audioSource.Pause();
+    }
+
+    //resume audio when game is unpaused
+    public void ResumeClip()
+    {
+        audioSource.UnPause();
+    }
 }
