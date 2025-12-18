@@ -9,8 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public float laneChangeSpeed = 15f;
 
     [Header("Lanes")]
-    public float laneWidth = 3f;        // distance between lanes
-    private int lane = 1;               // 0 = left, 1 = middle, 2 = right
+    public float laneWidth = 3f;          // distance between lanes
+    private int lane = 1;                 // 0 = left, 1 = middle, 2 = right
+    private int previousLane = 1;
     private float targetX;
 
     [Header("Jump & Gravity")]
@@ -23,24 +24,11 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration = 0.6f;
     public float slideHeight = 1.0f;
 
-    [Header("Visuals")]
-    public Transform visualModel;        // assign the Model child here
-    public float slideVisualOffset = 0.5f; // how far down the model moves when sliding
-
-    private int previousLane;
-    public int CurrentLane => lane;
-    public int PreviousLane => previousLane;
-
-    [Header("Audio")]
-    public AudioClip jumpClip;
-    public AudioClip slideClip;
-    public AudioClip laneSwitchClip;
-    public AudioClip runningClip;
-
+    [Header("Animation")]
     [SerializeField] private Animator animator;
+    [SerializeField] private Transform visualRoot; // model root to rotate at finish
 
-
-    // ---- internals ----
+    // internals
     private CharacterController cc;
     private PlayerControls input;
     private bool sliding;
@@ -51,32 +39,21 @@ public class PlayerMovement : MonoBehaviour
     private float originalHeight;
     private Vector3 originalCenter;
 
-    private Vector3 originalModelLocalPos;
+    private bool hasFinished = false;
 
-    private void Start()
-    {
-        Time.timeScale = 1f; //ensure time is normal on start
-    }
     void Awake()
     {
-        previousLane = lane; // start with middle
-
         cc = GetComponent<CharacterController>();
         input = new PlayerControls();
 
         originalHeight = cc.height;
         originalCenter = cc.center;
 
-        if (visualModel != null)
-            originalModelLocalPos = visualModel.localPosition;
-
-        // play running sound
-        if (SoundFXManager.instance != null && runningClip != null)
-        {
-            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); 
-        }
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+
+        if (visualRoot == null && animator != null)
+            visualRoot = animator.transform;
     }
 
     void OnEnable()
@@ -97,6 +74,23 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (hasFinished)
+        {
+            // Only gravity so we stay grounded, no lane/forward movement
+            if (cc.isGrounded)
+            {
+                if (yVelocity < 0f) yVelocity = -2f;
+            }
+            else
+            {
+                yVelocity += gravity * Time.deltaTime;
+            }
+
+            Vector3 moveFinished = new Vector3(0f, yVelocity * Time.deltaTime, 0f);
+            cc.Move(moveFinished);
+            return;
+        }
+
         Vector3 move = Vector3.zero;
 
         // Constant forward motion
@@ -118,78 +112,48 @@ public class PlayerMovement : MonoBehaviour
         }
 
         move.y = yVelocity * Time.deltaTime;
+
         cc.Move(move);
 
         UpdateAnimator();
-
     }
 
     // ---------------- helpers ----------------
 
     void ChangeLane(int dir)
     {
-        int newLane = Mathf.Clamp(lane + dir, 0, 2); // 0 = left, 1 = middle, 2 = right
+        int newLane = Mathf.Clamp(lane + dir, 0, 2); // 3 lanes: 0,1,2
         if (newLane == lane) return;
 
-        previousLane = lane;            // remember where we came from
+        previousLane = lane;
         lane = newLane;
-        targetX = (lane - 1) * laneWidth; // -w, 0, +w
-
-
-        // play lane switch sound
-        if (SoundFXManager.instance != null && laneSwitchClip != null) //add condition for running being played
-        {
-            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
-            SoundFXManager.instance.PlaySoundFXClip(laneSwitchClip, transform, 1f); //plays lane switch sound
-            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after lane switch
-        }
+        targetX = (lane - 1) * laneWidth; // lanes at -w, 0, +w
     }
 
-    // called when you side-bump something
     public void RevertLane()
     {
         lane = previousLane;
         targetX = (lane - 1) * laneWidth;
     }
 
-
     void TryJump()
     {
-        // Only jump if grounded
-        if (!cc.isGrounded) return; 
+        if (!cc.isGrounded) return;
 
-        // If we�re sliding, cancel slide and go into jump
         if (sliding) CancelSlide();
 
         yVelocity = jumpForce;
-
-        // play jump sound if manager exists
-        if (SoundFXManager.instance != null && jumpClip != null)
-        {
-            SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
-            SoundFXManager.instance.PlaySoundFXClip(jumpClip, transform, 1f); //plays jump sound
-            SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after jump
-        }
     }
-
 
     void TrySlide()
     {
         if (cc.isGrounded)
         {
             if (!sliding) slideRoutine = StartCoroutine(SlideRoutine());
-
-            // play slide sound
-            if (SoundFXManager.instance != null && slideClip != null)
-            {
-                SoundFXManager.instance.DestroyLoopingFXClip(); //destroys running audio
-                SoundFXManager.instance.PlaySoundFXClip(slideClip, transform, 1f); //plays slide whoosh sound
-                SoundFXManager.instance.PlayLoopingFXClip(runningClip, transform, 1f); //plays running sound after sliding
-            }
         }
         else
         {
-            // In air -> fast-fall
+            // in air -> fast-fall
             yVelocity = gravity * fastFallMultiplier;
         }
     }
@@ -198,17 +162,10 @@ public class PlayerMovement : MonoBehaviour
     {
         sliding = true;
 
-        // shrink controller so we can go under obstacles
+        // shrink controller for slide
         cc.height = slideHeight;
         cc.center = new Vector3(originalCenter.x, slideHeight * 0.5f, originalCenter.z);
 
-        // move visual model down
-        if (visualModel != null)
-        {
-            visualModel.localPosition = originalModelLocalPos + new Vector3(0f, -slideVisualOffset, 0f);
-        }
-
-        // Time the slide
         float t = 0f;
         while (t < slideDuration && sliding)
         {
@@ -216,23 +173,16 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        // restore collider
+        // restore
         cc.height = originalHeight;
         cc.center = originalCenter;
-
-        // restore visual
-        if (visualModel != null)
-        {
-            visualModel.localPosition = originalModelLocalPos;
-        }
-
         sliding = false;
         slideRoutine = null;
     }
 
     void CancelSlide()
     {
-        if (!sliding) return; 
+        if (!sliding) return;
 
         if (slideRoutine != null)
         {
@@ -242,10 +192,6 @@ public class PlayerMovement : MonoBehaviour
 
         cc.height = originalHeight;
         cc.center = originalCenter;
-
-        if (visualModel != null)
-            visualModel.localPosition = originalModelLocalPos;
-
         sliding = false;
     }
 
@@ -253,10 +199,47 @@ public class PlayerMovement : MonoBehaviour
     {
         if (animator == null) return;
 
-        bool grounded = cc.isGrounded;
+        // Don't stomp dance state
+        if (animator.GetBool("IsDancing")) return;
 
+        bool grounded = cc.isGrounded;
         animator.SetBool("IsGrounded", grounded);
         animator.SetBool("IsSliding", sliding);
+    }
+
+    public void EndRun()
+    {
+        if (hasFinished) return;
+        hasFinished = true;
+
+        forwardSpeed = 0f;
+        sliding = false;
+
+        if (input != null)
+            input.Player.Disable();
+
+        if (animator != null)
+        {
+            animator.SetBool("IsSliding", false);
+            animator.SetBool("IsDancing", true);
+        }
+
+        if (visualRoot != null)
+        {
+            Camera cam = Camera.main;
+            if (cam != null)
+            {
+                Vector3 toCam = cam.transform.position - visualRoot.position;
+                toCam.y = 0f;
+
+                if (toCam.sqrMagnitude > 0.01f)
+                    visualRoot.forward = toCam.normalized;
+            }
+            else
+            {
+                visualRoot.Rotate(0f, 180f, 0f);
+            }
+        }
     }
 
 

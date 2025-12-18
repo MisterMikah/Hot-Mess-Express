@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Divider
   - RoadSection
+  - FinishTrigger
   layers:
   - Default
   - TransparentFX
