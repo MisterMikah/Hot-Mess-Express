@@ -26,7 +26,7 @@ public class SettingsScript : MonoBehaviour
 
     }
 
-      
+    /*
     //Doesn't sound good cause it gets called every time slider value changes
     public void SliderSounds() //may delete
     {
@@ -41,4 +41,5 @@ public class SettingsScript : MonoBehaviour
             SoundFXManager.instance.PlaySoundFXClip(slidingPopClip, Camera.main.transform, 1f);
         }
     }
+    */
 }
