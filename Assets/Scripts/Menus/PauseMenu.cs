@@ -29,8 +29,11 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1f; //resume time in scene
 
-        SoundFXManager.instance.ResumeClip(); //resume audio clip
-
+        if (SoundFXManager.instance.audioSource != null)
+        {
+            SoundFXManager.instance.ResumeClip(); //resume current audio clip if it exists
+        }
+        
         pauseMenuUI.SetActive(false); //makes pause menu disappear
         isPaused = false;
     }
@@ -38,8 +41,12 @@ public class PauseMenu : MonoBehaviour
     private void Pause()
     {
         Time.timeScale = 0f; //freeze time in scene
-        SoundFXManager.instance.PauseClip(); //pause audio clip
 
+        if (SoundFXManager.instance.audioSource != null)
+        {
+            SoundFXManager.instance.PauseClip(); //pause current audio clip if it exists
+        }
+    
         pauseMenuUI.SetActive(true); //makes pause menu appear
         isPaused = true;
     }
@@ -48,11 +55,16 @@ public class PauseMenu : MonoBehaviour
     {
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        SettingsScript.settingsPrevScene = 2;
-
-        //save prev scene
-
-        //gonna test settings menu where instead of being a separate scene, it is a layer of ui
+        
+        if (SceneManager.GetActiveScene().buildIndex == 3) //paused from cooking minigame
+        {
+            SettingsScript.settingsPrevScene = 1;
+        }
+        else if (SceneManager.GetActiveScene().buildIndex == 2) //paused from runner
+        {
+            SettingsScript.settingsPrevScene = 2;
+        }
+        
 
         SceneManager.LoadScene("Settings Menu");
 
@@ -60,8 +72,11 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitToMenu()
     {
-        //destroy audio clips from current scene
-        SoundFXManager.instance.DestroyLoopingFXClip();
+        //destroy audio clips from current scene if they exist
+        if (SoundFXManager.instance.audioSource != null)
+        {
+            SoundFXManager.instance.DestroyLoopingFXClip();
+        }
 
         //play button click sound
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f);

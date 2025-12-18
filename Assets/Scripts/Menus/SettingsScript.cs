@@ -30,10 +30,6 @@ public class SettingsScript : MonoBehaviour
             SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
             SceneManager.LoadScene("Scene_1");
         }
-        
-
-        
-
     }
 
     /*

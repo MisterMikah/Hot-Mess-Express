@@ -35,7 +35,7 @@ public class MainMenuScript : MonoBehaviour
         //play bell ring sound
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        SceneManager.LoadScene("HotMess"); 
+        SceneManager.LoadScene("HotMess"); //Scene_1, HotMess
         //REMINDERS:
         //      - change string name from "Scene_1" to whatever the real scene will 
         //          officially be called
