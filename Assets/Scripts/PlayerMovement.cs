@@ -253,6 +253,10 @@ public class PlayerMovement : MonoBehaviour
         forwardSpeed = 0f;
         sliding = false;
 
+        // stop running sound immediately
+        if (SoundFXManager.instance != null)
+            SoundFXManager.instance.DestroyLoopingFXClip();
+
         if (input != null)
             input.Player.Disable();
 
@@ -262,6 +266,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsDancing", true);
         }
 
+        // rotate model to face the camera
         if (visualRoot != null)
         {
             Camera cam = Camera.main;
@@ -269,7 +274,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector3 toCam = cam.transform.position - visualRoot.position;
                 toCam.y = 0f;
-
                 if (toCam.sqrMagnitude > 0.01f)
                     visualRoot.forward = toCam.normalized;
             }
@@ -279,6 +283,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
 
 
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2276,14 +2276,14 @@ MonoBehaviour:
   laneWidth: 3
   rowSpacing: 9
   spawnAhead: 40
-  despawnBehind: 20
+  despawnBehind: 15
   maxTrucks: 3
   truckChance: 0.5
   truckRowsMinMax: {x: 1, y: 2}
   truckMoveSpeed: 5
   dividerBurstChance: 0.25
   dividerBurstLen: {x: 1, y: 3}
-  sideLaneObstacleChance: 0.75
+  sideLaneObstacleChance: 0.5
   fenceChance: 0.5
   endObstacleBuffer: 15
 --- !u!1001 &1730045714
