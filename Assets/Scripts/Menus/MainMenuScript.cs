@@ -41,7 +41,7 @@ public class MainMenuScript : MonoBehaviour
         //  - currently set to button press sound in inpector
         //  - change later if figure out fix
 
-        SceneManager.LoadScene("Scene_1"); 
+        SceneManager.LoadScene("HotMess"); 
         //REMINDERS:
         //      - change string name from "Scene_1" to whatever the real scene will 
         //          officially be called
