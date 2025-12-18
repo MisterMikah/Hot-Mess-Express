@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HotMess.unity
     guid: baa7fc99bd3916140928ac6fef6010c3
+  - enabled: 1
+    path: Assets/Scenes/Menus/EndScene.unity
+    guid: 61138f81779b96a41b54dfb5232ed41f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 50554be6bea8f1d4ca12190e3a2fa90f, type: 2}

@@ -7,7 +7,8 @@ public class PlayerCollision : MonoBehaviour
     public int currentHearts;
 
     [Header("UI")]
-    public PlayerHealthUI healthUI;   // drag BurgerBar here
+    public PlayerHealthUI healthUI;   // burger hearts
+    private GameOverUI gameOverUI;    // new
 
     [Header("Audio")]
     public AudioClip frontHitClip;
@@ -16,6 +17,9 @@ public class PlayerCollision : MonoBehaviour
 
     private CharacterController cc;
     private PlayerMovement movement;
+
+    private bool collisionsEnabled = true;
+    private bool isDead = false;
 
     void Awake()
     {
@@ -30,20 +34,32 @@ public class PlayerCollision : MonoBehaviour
 
         if (healthUI != null)
             healthUI.SetHearts(currentHearts, maxHearts);
+
+        // find GameOverUI even if its canvas starts disabled
+        gameOverUI = FindObjectOfType<GameOverUI>(true);
+        if (gameOverUI == null)
+        {
+            Debug.LogWarning("PlayerCollision: No GameOverUI found in scene.");
+        }
+    }
+
+    public void DisableCollisions()
+    {
+        collisionsEnabled = false;
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if (!collisionsEnabled || isDead) return;
         if (currentHearts <= 0) return;
 
-        // All hittable stuff should be tagged "Obstacle" (trucks, fences, dividers)
         if (!hit.collider.CompareTag("Obstacle")) return;
 
         bool headOn = IsHeadOn(hit);
 
         if (headOn)
         {
-            // straight into something
+            // straight into something: instant game over
             if (SoundFXManager.instance != null && frontHitClip != null)
             {
                 SoundFXManager.instance.DestroyLoopingFXClip();
@@ -77,29 +93,25 @@ public class PlayerCollision : MonoBehaviour
             movement.RevertLane();
     }
 
-    // Decide if this is a head-on hit or a side bump based on HOW we were moving
     bool IsHeadOn(ControllerColliderHit hit)
     {
         Vector3 move = hit.moveDirection;
         move.y = 0f;
 
         if (move.sqrMagnitude < 0.0001f)
-        {
-            // weird degenerate case, just treat as side
-            return false;
-        }
+            return false; // treat weird case as side
 
-        // local Z = forward, X = sideways
         Vector3 localMove = transform.InverseTransformDirection(move);
         float absX = Mathf.Abs(localMove.x);
         float absZ = Mathf.Abs(localMove.z);
 
-        // Bias toward side hits a bit so "almost sideways" counts as side
+        // forward-dominant = head-on
         return absZ >= absX * 1.2f;
     }
 
     void TakeDamage(int amount)
     {
+        if (isDead) return;
         if (currentHearts <= 0) return;
 
         currentHearts -= amount;
@@ -119,9 +131,23 @@ public class PlayerCollision : MonoBehaviour
 
     void Die()
     {
-        if (Time.timeScale == 0f) return; // already dead
+        if (isDead) return;
+        isDead = true;
+        collisionsEnabled = false;
+
+        Debug.Log("PlayerCollision: GAME OVER");
+
+        // freeze gameplay
         Time.timeScale = 0f;
-        Debug.Log("GAME OVER");
-        // TODO: show Game Over UI
+
+        // show game-over UI
+        if (gameOverUI != null)
+        {
+            gameOverUI.ShowGameOver();
+        }
+        else
+        {
+            Debug.LogWarning("PlayerCollision: gameOverUI is null, cannot show Game Over UI.");
+        }
     }
 }
