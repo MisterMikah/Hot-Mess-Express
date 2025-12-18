@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
-    public static Boolean prevSceneMain = false;
-
     //audio
     [SerializeField] private AudioClip bellRingClip;
     [SerializeField] private AudioClip buttonPressClip; 
@@ -54,7 +52,7 @@ public class MainMenuScript : MonoBehaviour
         //play button press sound
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        prevSceneMain = true;
+        SettingsScript.settingsPrevScene = 0;
         SceneManager.LoadScene("Settings Menu");
     }
 

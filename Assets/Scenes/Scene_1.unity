@@ -997,6 +997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1332970655}
+  buttonPressClip: {fileID: 8300000, guid: 8fc51cff58b0643438a0a2825634b292, type: 3}
 --- !u!1 &741174396
 GameObject:
   m_ObjectHideFlags: 0

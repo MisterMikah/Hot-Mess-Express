@@ -10,19 +10,29 @@ public class SettingsScript : MonoBehaviour
     [SerializeField] private AudioClip buttonPressClip;
     [SerializeField] private AudioClip slidingPopClip;
     [SerializeField] public Slider volumeSlider; 
+
+    public static int settingsPrevScene;
     public void LoadPrevScene() //return to previous screen (Main Menu or Pause Screen) when press back button
     {
-        //scuffed as hell, may change later should better solution present itself
-
-        if (MainMenuScript.prevSceneMain) //load main menu if main menu is prev scene
+        
+        if (settingsPrevScene == 0) //prev screen is Main Menu
         {
             SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
-            MainMenuScript.prevSceneMain = false;
             SceneManager.LoadScene("Main Menu");
         }
-        //include case for pause screen at minigame
+        else if (settingsPrevScene == 1) //prev screen is Minigame
+        {
+            SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
+            SceneManager.LoadScene("HotMess"); 
+        }
+        else if (settingsPrevScene == 2) //prev screen is Runner
+        {
+            SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
+            SceneManager.LoadScene("Scene_1");
+        }
+        
 
-        //include case for pause screen at runner
+        
 
     }
 
