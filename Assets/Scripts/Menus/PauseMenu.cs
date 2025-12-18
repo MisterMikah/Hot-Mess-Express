@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         Time.timeScale = 1f; //resume time in scene
+
         SoundFXManager.instance.ResumeClip(); //resume audio clip
 
         pauseMenuUI.SetActive(false); //makes pause menu disappear
@@ -47,17 +48,25 @@ public class PauseMenu : MonoBehaviour
     {
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        SettingsScript.settingsPrevScene = 1;
-        SceneManager.LoadScene("Settings Menu");
+        SettingsScript.settingsPrevScene = 2;
 
-        //connect these functions to the buttons
+        //save prev scene
+
+        //gonna test settings menu where instead of being a separate scene, it is a layer of ui
+
+        SceneManager.LoadScene("Settings Menu");
 
     }
 
-    public void QuitGame()
+    public void QuitToMenu()
     {
-        Debug.Log("Quit Game");
-        Application.Quit();
+        //destroy audio clips from current scene
+        SoundFXManager.instance.DestroyLoopingFXClip();
+
+        //play button click sound
+        SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f);
+
+        SceneManager.LoadScene("Main Menu");
     }
 
 }

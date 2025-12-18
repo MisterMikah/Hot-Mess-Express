@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class MainMenuScript : MonoBehaviour
 {
     //audio
-    [SerializeField] private AudioClip bellRingClip;
     [SerializeField] private AudioClip buttonPressClip; 
     [SerializeField] private AudioClip music;
 
@@ -34,10 +33,7 @@ public class MainMenuScript : MonoBehaviour
     public void PlayGame() //starts game when press start button
     {
         //play bell ring sound
-        SoundFXManager.instance.PlaySoundFXClip(bellRingClip, Camera.main.transform, 1f); 
-        //  - for some reason won't play bellRingClip even though it works fine when set to Exit button
-        //  - currently set to button press sound in inpector
-        //  - change later if figure out fix
+        SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
         SceneManager.LoadScene("Scene_1"); 
         //REMINDERS:
