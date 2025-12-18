@@ -64,7 +64,6 @@ public class PauseMenu : MonoBehaviour
         {
             SettingsScript.settingsPrevScene = 2;
         }
-        
 
         SceneManager.LoadScene("Settings Menu");
 
