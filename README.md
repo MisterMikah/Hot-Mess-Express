@@ -27,8 +27,8 @@ Mess up too badly... and they’ll chase you down.
 
 # Assets
 - Food Pack
-- Kitchen Hardware and Furniture
-- Buildings
+- Kitchen Hardware and Furniture Pack
+- City Pack
 
 
 # Opening Line
