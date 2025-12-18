@@ -826,7 +826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resultText: {fileID: 151698995}
   displayTime: 2
-  runnerSceneName: Scene_01
+  runnerSceneName: Scene_1
 --- !u!65 &280621239
 BoxCollider:
   m_ObjectHideFlags: 0
