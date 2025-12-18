@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using TMPro;
-
-//once the burger is complete, the player can click the plate and it will read if the correct order has been made.
-//if the order is correct or incorrect, then that will be displayed on the screen
+using UnityEngine.SceneManagement;
 
 public class ServePlate : MonoBehaviour
 {
     public TextMeshProUGUI resultText;
     public float displayTime = 2f;
+
+    [Header("Scenes")]
+    public string runnerSceneName = "RunnerScene";  // set this in Inspector
 
     void Start()
     {
@@ -17,24 +17,20 @@ public class ServePlate : MonoBehaviour
             resultText.text = "";
     }
 
-    void Update()
-    {
-
-    }
-
     private void OnMouseDown()
     {
+        // correct
         if (GameFlow.orderValue == GameFlow.plateValue)
         {
-            StartCoroutine(ShowResult("CORRECT!", Color.green));
+            StartCoroutine(ShowResultAndContinue("CORRECT!", Color.green, true));
         }
-        else
+        else // incorrect
         {
-            StartCoroutine(ShowResult("INCORRECT!", Color.red));
+            StartCoroutine(ShowResultAndContinue("INCORRECT!", Color.red, false));
         }
     }
 
-    private IEnumerator ShowResult(string message, Color color)
+    private IEnumerator ShowResultAndContinue(string message, Color color, bool correct)
     {
         if (resultText != null)
         {
@@ -44,5 +40,15 @@ public class ServePlate : MonoBehaviour
 
         yield return new WaitForSeconds(displayTime);
 
+        if (correct)
+        {
+            // Load next level → the runner scene
+            SceneManager.LoadScene(runnerSceneName);
+        }
+        else
+        {
+            // Reload current scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

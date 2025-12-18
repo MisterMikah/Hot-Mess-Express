@@ -47,7 +47,7 @@ public class GameOverUI : MonoBehaviour
             gameOverPanel.SetActive(true);
 
         if (messageText != null)
-            messageText.text = "Game Over";
+            messageText.text = "THE FOOD WAS DESTROYED";
     }
 
     private void OnRetry()
