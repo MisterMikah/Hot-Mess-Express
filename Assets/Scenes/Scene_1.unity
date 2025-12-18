@@ -1898,8 +1898,8 @@ MonoBehaviour:
   roadSection: {fileID: 2826104897232267525, guid: 166cc973e4ceadb499ba6b1704817bfc, type: 3}
   sectionLength: 100
   maxSections: 1
-  minExtraSections: 1
-  maxExtraSections: 3
+  minExtraSections: 5
+  maxExtraSections: 10
   endSectionPrefab: {fileID: 1672434887395298957, guid: dd0489f35a0d38e42a1fa2986d87aef3, type: 3}
   obstacleSpawner: {fileID: 1695225705}
 --- !u!54 &1973328958
