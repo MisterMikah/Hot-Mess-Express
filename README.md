@@ -11,8 +11,7 @@ Cook the meal, dodge traffic, and try to deliver your food before it’s complet
 
 
 # Game Summary
-Players start by cooking food through a quick simple build-a-burger minigame. After, they jump straight into a high speed delivery run through a city filled with obstacles.  
-Every side hit damages the food and a head on collision leads straight to a game over.
+The player starts by cooking food through a quick simple build-a-burger minigame. After, they jump straight into a high speed delivery run through a city filled with obstacles. Every side hit damages the food; get hit three times and it's game over. If you get hit in a straight on collision, then that's a game over too. Last long enough with little damage and you'll live to deliever the food (it may be a little beat up but it's still edible).
 
 
 # Core Features
