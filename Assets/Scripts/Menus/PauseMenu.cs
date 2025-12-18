@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && (GameOverUI.gameOverActive == false))
         {
             if (isPaused) //game is paused
             {
@@ -64,7 +64,6 @@ public class PauseMenu : MonoBehaviour
         {
             SettingsScript.settingsPrevScene = 2;
         }
-        
 
         SceneManager.LoadScene("Settings Menu");
 

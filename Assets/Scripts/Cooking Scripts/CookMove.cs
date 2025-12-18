@@ -30,8 +30,10 @@ public class CookMove : MonoBehaviour
         GameFlow.plateValue += foodValue;
         stillCooking = "n";
 
-        //destroy audio for grilling when meat off the pan
-        SoundFXManager.instance.DestroyLoopingFXClip();
+        if (SoundFXManager.instance.audioSource != null) {
+            SoundFXManager.instance.DestroyLoopingFXClip(); //destroy audio for grilling when meat off the pan
+        }
+
         //play place sound effect when put on plate
         SoundFXManager.instance.PlaySoundFXClip(placeClip, transform, 1f);
     }
