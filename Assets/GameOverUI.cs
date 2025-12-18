@@ -15,6 +15,8 @@ public class GameOverUI : MonoBehaviour
     public string gameSceneName = "RunnerScene"; // set in Inspector
     public string mainMenuSceneName = "MainMenu"; // set in Inspector
 
+    public static bool gameOverActive = false;
+
     private Canvas parentCanvas;
 
     private void Awake()
@@ -48,16 +50,20 @@ public class GameOverUI : MonoBehaviour
 
         if (messageText != null)
             messageText.text = "THE FOOD WAS DESTROYED";
+
+        gameOverActive = true;
     }
 
     private void OnRetry()
     {
+        gameOverActive = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(gameSceneName);
     }
 
     private void OnMenu()
     {
+        gameOverActive = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuSceneName);
     }
