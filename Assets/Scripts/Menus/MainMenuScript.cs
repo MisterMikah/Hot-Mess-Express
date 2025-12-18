@@ -7,10 +7,7 @@ using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
-    public static Boolean prevSceneMain = false;
-
     //audio
-    [SerializeField] private AudioClip bellRingClip;
     [SerializeField] private AudioClip buttonPressClip; 
     [SerializeField] private AudioClip music;
 
@@ -36,12 +33,9 @@ public class MainMenuScript : MonoBehaviour
     public void PlayGame() //starts game when press start button
     {
         //play bell ring sound
-        SoundFXManager.instance.PlaySoundFXClip(bellRingClip, Camera.main.transform, 1f); 
-        //  - for some reason won't play bellRingClip even though it works fine when set to Exit button
-        //  - currently set to button press sound in inpector
-        //  - change later if figure out fix
+        SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        SceneManager.LoadScene("HotMess"); 
+        SceneManager.LoadScene("HotMess"); //Scene_1, HotMess
         //REMINDERS:
         //      - change string name from "Scene_1" to whatever the real scene will 
         //          officially be called
@@ -54,7 +48,7 @@ public class MainMenuScript : MonoBehaviour
         //play button press sound
         SoundFXManager.instance.PlaySoundFXClip(buttonPressClip, Camera.main.transform, 1f); 
 
-        prevSceneMain = true;
+        SettingsScript.settingsPrevScene = 0;
         SceneManager.LoadScene("Settings Menu");
     }
 

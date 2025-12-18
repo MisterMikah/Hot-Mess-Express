@@ -6,7 +6,7 @@ public class SoundFXManager : MonoBehaviour
 
     [SerializeField] private AudioSource soundFXObject;
     
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
 
     private void Awake()
@@ -61,5 +61,17 @@ public class SoundFXManager : MonoBehaviour
     public void DestroyLoopingFXClip()
     {
         Destroy(audioSource.gameObject);
+    }
+
+    //pause audio when game is paused
+    public void PauseClip()
+    {
+        audioSource.Pause();
+    }
+
+    //resume audio when game is unpaused
+    public void ResumeClip()
+    {
+        audioSource.UnPause();
     }
 }
